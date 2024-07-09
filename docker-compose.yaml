@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  code-challenge-database-1:
+    build: .  # Build the PostgreSQL container using the Dockerfile
+    environment:
+      POSTGRES_USER: northwind_user
+      POSTGRES_PASSWORD: thewindisblowing
+      POSTGRES_DB: northwind
+    ports:
+      - "5432:5432"
+    networks:
+      - challenge-network
+
+  airflow:
+    image: apache/airflow:2.4.1
+    ports:
+      - "8081:8080"
+    environment:
+      - AIRFLOW_UID=1000
+      - AIRFLOW_GID=1000
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql://northwind_user:thewindisblowing@code-challenge-database-1:5432/northwind
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+    volumes:
+      - airflow/dags:/usr/local/airflow/dags
+      - airflow/plugins:/usr/local/airflow/plugins
+      - airflow/data:/data  # Mount the data folder into the container
+    networks:
+      - challenge-network
+    depends_on:
+      - code-challenge-database-1  # Ensure the database is running first
+
+networks:
+  challenge-network:
+    driver: bridge
+
+volumes:
+  airflow:
+    - dags  # Assuming your DAGs are in a 'dags' directory
+    - plugins  # Assuming your plugins are in a 'plugins' directory
+    - data  # Assuming your data directory is 'data' 

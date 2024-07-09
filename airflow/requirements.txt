@@ -1,0 +1,7 @@
+apache-airflow==2.4.1
+# Use constraints file for compatible versions
+--constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.4.1/constraints-3.9.txt"
+# Install for PostgreSQL connection
+psycopg2-binary
+# For datetime operations
+python-dateutil
