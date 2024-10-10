@@ -1,84 +1,93 @@
-# Indicium Tech Code Challenge
+# 🚀 Projeto de Processamento de Dados com Meltano e Airflow
 
-Code challenge for Software Developer with focus in data projects.
+## 📝 Descrição
+Este projeto tem como objetivo automatizar a criação de ambientes e a execução de pipelines de dados usando Meltano e Airflow. Ele inclui a configuração de um banco de dados PostgreSQL e a inicialização do Airflow para gerenciar as DAGs que orquestram o fluxo de dados entre fontes de dados como CSV e PostgreSQL.
 
+### Desafio de Código da Indicium Tech
+Este desafio foi desenvolvido para candidatos a Engenharia de Dados.
 
-## Context
+## Contexto
+Na Indicium, desenvolvemos pipelines de dados completos para nossos clientes, extraindo dados de diversas fontes e carregando-os em destinos variados, como data warehouses ou APIs para integração com sistemas de terceiros. Como desenvolvedor de software focado em projetos de dados, sua missão é planejar, desenvolver, implantar e manter uma pipeline de dados.
 
-At Indicium we have many projects where we develop the whole data pipeline for our client, from extracting data from many data sources to loading this data at its final destination, with this final destination varying from a data warehouse for a Business Intelligency tool to an api for integrating with third party systems.
+## O Desafio
+Você receberá duas fontes de dados: um banco de dados PostgreSQL e um arquivo CSV. O arquivo CSV representa detalhes de pedidos de um sistema de e-commerce, e o banco de dados é uma versão modificada do Northwind, onde a tabela `order_details` não está presente, sendo substituída pelo arquivo CSV.
 
-As a software developer with focus in data projects your mission is to plan, develop, deploy, and maintain a data pipeline.
+Seu objetivo é construir uma pipeline que extraia dados diariamente de ambas as fontes, salvando-os primeiro em disco local e, em seguida, carregando-os em um banco de dados PostgreSQL.
 
+## Requisitos Principais
+- A pipeline deve ser executada diariamente e ter uma estrutura de arquivos separada por fonte, tabela e data.
+- As etapas de escrita (para o disco local e para o PostgreSQL) devem ser isoladas e idempotentes.
+- A solução deve permitir reprocessar dados de dias anteriores.
+- Ferramentas obrigatórias: Airflow, Meltano ou Embulk, e PostgreSQL.
 
-## The Challenge
+## Critérios de Avaliação
+- Código limpo e organizado.
+- Decisões bem fundamentadas sobre a arquitetura e formatos utilizados.
+- Capacidade de buscar informações e resolver problemas com ferramentas desconhecidas.
 
-We are going to provide 2 data sources, a PostgreSQL database and a CSV file.
+## ✅ Pré-requisitos
+- 🐍 Python 3.6 ou superior
+- 🐳 Docker e Docker Compose
+- 🌐 Git
 
-The CSV file represents details of orders from an ecommerce system.
+## ⚙️ Instalação
 
-The database provided is a sample database provided by microsoft for education purposes called northwind, the only difference is that the **order_detail** table does not exists in this database you are beeing provided with. This order_details table is represented by the CSV file we provide.
+1. *Criação do Ambiente Virtual Python*
+Para criar um ambiente virtual, execute:
 
-Schema of the original Northwind Database: 
-
-![image](https://user-images.githubusercontent.com/49417424/105997621-9666b980-608a-11eb-86fd-db6b44ece02a.png)
-
-Your challenge is to build a pipeline that extracts the data everyday from both sources and write the data first to local disk, and second to a PostgreSQL database. For this challenge, the CSV file and the database will be static, but in any real world project, both data sources would be changing constantly.
-
-Its important that all writing steps (writing data from inputs to local filesystem and writing data from local filesystem to PostgreSQL database) are isolated from each other, you shoud be able to run any step without executing the others.
-
-For the first step, where you write data to local disk, you should write one file for each table. This pipeline will run everyday, so there should be a separation in the file paths you will create for each source(CSV or Postgres), table and execution day combination, e.g.:
-
+```bash
+python -m venv .venv
 ```
-/data/postgres/{table}/2024-01-01/file.format
-/data/postgres/{table}/2024-01-02/file.format
-/data/csv/2024-01-02/file.format
+
+## Para Linux/Mac
+```source .venv/bin/activate```  
+
+*ou*
+
+## Para Windows
+
+```.\venv\Scripts\activate ```
+
+2. *Instalação do Meltano*
+
+Execute os comandos abaixo no terminal para instalar o Meltano e configurar o projeto:
+
+```bash
+pip install --upgrade pip && pip install meltano
+meltano --version  # Verifique a versão instalada
+meltano init etl_meltano  # Inicie um novo projeto
+cd etl_meltano
+meltano add extractor tap-csv  # Adicione o extrator CSV
+meltano add loader target-csv  # Adicione o carregador CSV
+meltano add extractor tap-postgres  # Adicione o extrator PostgreSQL
+meltano add loader target-postgres  # Adicione o carregador PostgreSQL
 ```
 
-You are free to chose the naming and the format of the file you are going to save.
+💡## Dica para usuários Windows: Execute os comandos individualmente para evitar erros.
+🖥️## Usuários Linux: Podem usar o script disponível na pasta help:
 
-At step 2, you should load the data from the local filesystem, which you have created, to the final database.
+```bash
+sh help/setup_meltano.sh 
+```
 
-The final goal is to be able to run a query that shows the orders and its details. The Orders are placed in a table called **orders** at the postgres Northwind database. The details are placed at the csv file provided, and each line has an **order_id** field pointing the **orders** table.
+2. *Inicie o Docker*
+Para subir o banco de dados PostgreSQL e iniciar o Airflow, execute:
 
-## Solution Diagram
+```bash*
+docker-compose up -d
+```
 
-As Indicium uses some standard tools, the challenge was designed to be done using some of these tools.
+Nota: O usuário e a senha padrão do Airflow são ambos admin.
 
-The following tools should be used to solve this challenge.
+⚠️ ###Erros Conhecidos
+Atualmente, as DAGs do Airflow podem apresentar o erro de "arquivo/diretório não encontrado" ao tentar referenciar o Meltano.
+Sugestões e contribuições para resolver esse problema são bem-vindas! 💡
 
-Scheduler:
-- [Airflow](https://airflow.apache.org/docs/apache-airflow/stable/installation/index.html)
+🤝 ###Contribuição
+Contribuições são sempre bem-vindas!
+Abra uma issue para relatar problemas, envie um pull request para propor melhorias ou correções.
 
-Data Loader:
-- [Embulk](https://www.embulk.org) (Java Based)
-**OR**
-- [Meltano](https://docs.meltano.com/?_gl=1*1nu14zf*_gcl_au*MTg2OTE2NDQ4Mi4xNzA2MDM5OTAz) (Python Based)
+📞 Contato
+Fique à vontade para entrar em contato comigo para mais informações ou suporte:
+📧 Email: *alexkrypt.ti@gmail.com*
 
-Database:
-- [PostgreSQL](https://www.postgresql.org/docs/15/index.html)
-
-The solution should be based on the diagrams below:
-![image](docs/diagrama_embulk_meltano.jpg)
-
-
-### Requirements
-
-- You **must** use the tools described above to complete the challenge.
-- All tasks should be idempotent, you should be able to run the pipeline everyday and, in this case where the data is static, the output shold be the same.
-- Step 2 depends on both tasks of step 1, so you should not be able to run step 2 for a day if the tasks from step 1 did not succeed.
-- You should extract all the tables from the source database, it does not matter that you will not use most of them for the final step.
-- You should be able to tell where the pipeline failed clearly, so you know from which step you should rerun the pipeline.
-- You have to provide clear instructions on how to run the whole pipeline. The easier the better.
-- You must provide evidence that the process has been completed successfully, i.e. you must provide a csv or json with the result of the query described above.
-- You should assume that it will run for different days, everyday.
-- Your pipeline should be prepared to run for past days, meaning you should be able to pass an argument to the pipeline with a day from the past, and it should reprocess the data for that day. Since the data for this challenge is static, the only difference for each day of execution will be the output paths.
-
-### Things that Matters
-
-- Clean and organized code.
-- Good decisions at which step (which database, which file format..) and good arguments to back those decisions up.
-- The aim of the challenge is not only to assess technical knowledge in the area, but also the ability to search for information and use it to solve problems with tools that are not necessarily known to the candidate.
-- Point and click tools are not allowed.
-
-
-Thank you for participating!
