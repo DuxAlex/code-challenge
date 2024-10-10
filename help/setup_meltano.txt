@@ -1,0 +1,11 @@
+#COLE NO TERMINAL E EXECUTE
+
+pip install --upgrade pip && \
+pip install meltano && \
+meltano --version && \
+meltano init etl_meltano && \
+cd etl_meltano && \
+meltano add extractor tap-csv && \
+meltano add loader target-csv && \
+meltano add extractor tap-postgres && \
+meltano add loader target-postgres

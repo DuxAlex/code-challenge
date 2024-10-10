@@ -1,0 +1,46 @@
+COMPATÍVEL COM AIRFLOW==2.4.1
+pip install meltano==2.9.0
+
+LOGIN E SENHA DO AIRFLOW
+admin admin ou airflow airflow
+
+excluir a pasta dbdata
+sudo rm -Rf dbdata/
+
+Excluir contêineres e imagens antiga
+docker-compose down --rmi all
+
+montar o conteiner -d separadamente
+docker-compose up --build -d
+
+entrar no conteiner
+docker exec -it <nome_do_container_airflow> /bin/bash
+
+ENTRAR NO BANCO DE DADOS 
+docker exec -it etl-indicium-db-1 psql -U northwind_user -d northwind                                                                     
+
+logs dos conteiner
+Execute o seguinte comando para verificar os logs do container 
+
+Logs do Container do airflow
+docker logs code-challenge-airflow-1
+
+Logs do Container do Scheduler
+docker logs code-challenge-scheduler-1
+
+APAGA TODOS OS CONTAINERS
+docker stop $(docker ps -aq)
+docker rm $(docker ps -aq)
+
+
+Se o airflow não quiser iniciar
+execute este comando no root directory
+sudo chmod -R 777 logs
+
+para obter log ede eventos do airflow
+docker-compose logs airflow > airflow_logs.txt
+
+permissão do script e executar
+chmod +x setup_airflow_logs.sh
+./setup_airflow_logs.sh
+

@@ -1,0 +1,23 @@
+version: 1
+
+plugins:
+  extractors:
+    - name: tap-postgres
+      config:
+        host: localhost
+        port: 5432
+        user: northwind_user
+        password: thewindisblowing
+        dbname: northwind
+    - name: tap-csv
+      config:
+        file: /path/to/order_details.csv  # Altere para o caminho correto do seu arquivo CSV
+        delimiter: ","
+  loaders:
+    - name: target-postgres
+      config:
+        host: localhost
+        port: 5432
+        user: northwind_user
+        password: thewindisblowing
+        dbname: northwind

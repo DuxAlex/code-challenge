@@ -1,0 +1,36 @@
+# Use uma imagem base com Python
+FROM python:3.9-slim
+
+# Atualiza e instala dependências necessárias
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Define o diretório de trabalho no contêiner
+WORKDIR /usr/src/app
+
+# Atualiza o pip
+RUN pip install --upgrade pip
+
+# Instala o Meltano
+RUN pip install meltano
+
+# Verifica a versão do Meltano (opcional, para checagem)
+RUN meltano --version
+
+# Inicializa o projeto Meltano chamado 'etl_meltano'
+RUN meltano init elt_meltano
+
+# Muda para o diretório do projeto
+WORKDIR /usr/src/app/elt_meltano
+
+# Instala os extratores e carregadores
+RUN meltano add extractor tap-csv
+RUN meltano add loader target-csv
+RUN meltano add extractor tap-postgres
+RUN meltano add loader target-postgres
+
+# Comando padrão do contêiner
+CMD ["meltano", "--help"]
+
