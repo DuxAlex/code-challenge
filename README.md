@@ -81,13 +81,12 @@ Nota: O usuário e a senha padrão do Airflow são ambos admin.
 
 ⚠️ Erros Conhecidos
 Atualmente, as DAGs do Airflow podem apresentar o erro de "arquivo/diretório não encontrado" ao tentar referenciar o Meltano.
-Sugestões e contribuições para resolver esse problema são bem-vindas! 💡
 
 🤝 Contribuição
 Contribuições são sempre bem-vindas!
 Abra uma issue para relatar problemas, envie um pull request para propor melhorias ou correções.
 
-###📞 Contato
+📞 Contato
 Fique à vontade para entrar em contato comigo para mais informações ou suporte:
 📧 Email: *alexkrypt.ti@gmail.com*
 
