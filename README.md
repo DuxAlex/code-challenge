@@ -63,8 +63,8 @@ meltano add extractor tap-postgres  # Adicione o extrator PostgreSQL
 meltano add loader target-postgres  # Adicione o carregador PostgreSQL
 ```
 
-##💡 Dica para usuários Windows: Execute os comandos individualmente para evitar erros.
-##🖥️ Usuários Linux: Podem usar o script disponível na pasta help:
+💡 Dica para usuários Windows: Execute os comandos individualmente para evitar erros.
+🖥️ Usuários Linux: Podem usar o script disponível na pasta help:
 
 ```bash
 sh help/setup_meltano.sh 
@@ -79,11 +79,11 @@ docker-compose up -d
 
 Nota: O usuário e a senha padrão do Airflow são ambos admin.
 
-###⚠️ Erros Conhecidos
+⚠️ Erros Conhecidos
 Atualmente, as DAGs do Airflow podem apresentar o erro de "arquivo/diretório não encontrado" ao tentar referenciar o Meltano.
 Sugestões e contribuições para resolver esse problema são bem-vindas! 💡
 
-###🤝 Contribuição
+🤝 Contribuição
 Contribuições são sempre bem-vindas!
 Abra uma issue para relatar problemas, envie um pull request para propor melhorias ou correções.
 
